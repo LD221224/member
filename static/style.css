@@ -4,7 +4,8 @@
 
 header{height: 100px;}
 nav ul{list-style: none; text-align: right; margin-right: 100px;}
-nav ul li{display: inline-block; margin: 10px;
+nav ul li{
+    display: inline-block; margin: 10px;
     border-top: 3px solid #333; padding: 10px;
 }
 nav ul li a{text-decoration: none; color: #000;}
@@ -13,3 +14,33 @@ nav ul li a:hover{background-color: #eee;}
 /* index style */
 section{text-align:center;}
 section h1{font-size: 2em; margin-bottom: 30px;}
+
+/* memberlist style */
+section table{width: 600px; margin: 0 auto;}
+section table, th, td{
+    padding: 10px; border: 1px solid #ccc;
+    border-collapse: collapse;
+}
+
+/* member_view style */
+section .tbl_view{width: 500px;}
+section .tbl_view td{width: 100px;}
+section .tbl_view input{width: 250px; height: 30px;}
+
+/* register style */
+section .join{width: 550px; margin: 0 auto;}
+section .join fieldset{border-radius: 5px;}
+section .join ul{list-style: none; padding: 10px;}
+section .join ul li{margin: 20px;}
+section .join ul label{width: 120px; float: left; text-align: right;}
+section .join ul input[type= 'text'], input[type= 'password']{width: 250px; height: 30px;}
+section .join ul input[type= 'submit'], input[type= 'reset']{width: 100px; height: 30px;}
+
+/* login style */
+section .login{width: 450px; margin: 0 auto;}
+section .login fieldset{border-radius: 5px;}
+section .login ul{list-style: none; padding: 10px;}
+section .login ul li{margin: 20px;}
+section .login ul label{width: 100px; float: left; text-align: right;}
+section .login ul input{width: 200px; height: 30px;}
+section .login ul input[type= 'submit']{width: 100px; height: 30px;}
