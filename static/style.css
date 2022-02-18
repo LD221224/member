@@ -1,0 +1,15 @@
+/* 전체 style */
+*{margin: 0; padding: 0;}
+#container{width: 1000px; margin: 0 auto;}
+
+header{height: 100px;}
+nav ul{list-style: none; text-align: right; margin-right: 100px;}
+nav ul li{display: inline-block; margin: 10px;
+    border-top: 3px solid #333; padding: 10px;
+}
+nav ul li a{text-decoration: none; color: #000;}
+nav ul li a:hover{background-color: #eee;}
+
+/* index style */
+section{text-align:center;}
+section h1{font-size: 2em; margin-bottom: 30px;}
