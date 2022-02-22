@@ -54,17 +54,25 @@ def register():
         name = request.form['name']
         age = request.form['age']
 
-        # DB에 저장
+        # DB에 저장 - 회원 가입 완료
         conn = getconn()
         cur = conn.cursor()
         sql = "INSERT INTO member(mid, passwd, name, age) " \
               "VALUES('%s', '%s', '%s', '%s')" % (id, pwd, name, age)
         cur.execute(sql)
         conn.commit()
-        print("회원 추가")
+
+        # 자동 로그인
+        sql = "SELECT * FROM member WHERE mid = '%s' AND passwd = '%s'" % (id, pwd)
+        cur.execute(sql)
+        rs = cur.fetchone()
         conn.close()
-        # redirect - 페이지 이동 함수
-        return redirect(url_for('memberlist'))
+
+        # 세션 발급
+        if rs:
+            session['userID'] = rs[0]
+            # redirect - 페이지 이동 함수
+            return redirect(url_for('memberlist'))
     else:
         return render_template('register.html')
 
@@ -114,6 +122,57 @@ def member_del(id):
     conn.commit()
     conn.close()
     return redirect(url_for('memberlist'))
+
+
+# 회원 수정
+@app.route('/member_edit/<string:id>/', methods=['GET', 'POST'])
+def member_edit(id):
+    if request.method == 'POST':
+        # 데이터 가져오기
+        mid = request.form['mid']
+        pwd = request.form['passwd']
+        name = request.form['name']
+        age = request.form['age']
+
+        # DB 수정
+        conn = getconn()
+        cur = conn.cursor()
+        sql = "UPDATE member SET passwd = '%s', name = '%s', age = '%s' " \
+              "WHERE mid = '%s'" % (pwd, name, age, mid)
+        cur.execute(sql)
+        conn.commit()
+        conn.close()
+        return redirect(url_for('member_view', id=id))
+    else:
+        conn = getconn()
+        cur = conn.cursor()
+        sql = "SELECT * FROM member WHERE mid = '%s'" % (id)
+        cur.execute(sql)
+        rs = cur.fetchone()
+        conn.close()
+        return render_template('member_edit.html', rs=rs)
+
+
+@app.route('/boardlist/')
+def boardlist():
+    conn = getconn()
+    cur = conn.cursor()
+    sql = "SELECT * FROM board ORDER BY bno DESC"
+    cur.execute(sql)
+    rs = cur.fetchall()
+    conn.close()
+    return render_template('boardlist.html', rs=rs)
+
+
+@app.route('/board_view/<int:id>/')
+def board_view(id):
+    conn = getconn()
+    cur = conn.cursor()
+    sql = "SELECT * FROM board WHERE bno = '%s'" % (id)
+    cur.execute(sql)
+    rs = cur.fetchone()
+    conn.close()
+    return render_template('board_view.html', rs=rs)
 
 
 app.run(debug=True)

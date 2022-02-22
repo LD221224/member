@@ -23,9 +23,16 @@ section table, th, td{
 }
 
 /* member_view style */
-section .tbl_view{width: 500px;}
+section .tbl_view{width: 450px;}
 section .tbl_view td{width: 100px;}
 section .tbl_view input{width: 250px; height: 30px;}
+
+/* member_edit style */
+section .tbl_edit{width: 450px;}
+section .tbl_edit td{width: 100px;}
+section .tbl_edit input{width: 250px; height: 30px;}
+section .tbl_edit input[type= 'submit']{width: 100px; height: 30px;}
+section .tbl_edit input[type= 'reset']{width: 100px; height: 30px;}
 
 /* register style */
 section .join{width: 550px; margin: 0 auto;}
@@ -39,8 +46,18 @@ section .join ul input[type= 'button'], input[type= 'reset']{width: 100px; heigh
 /* login style */
 section .login{width: 450px; margin: 0 auto;}
 section .login fieldset{border-radius: 5px;}
+section .login p{color: red; padding: 10px;}
 section .login ul{list-style: none; padding: 10px;}
 section .login ul li{margin: 20px;}
 section .login ul label{width: 100px; float: left; text-align: right;}
 section .login ul input{width: 200px; height: 30px;}
 section .login ul input[type= 'submit']{width: 100px; height: 30px;}
+
+/* boardlist style */
+section .btn_write{padding: 10px; text-align: right; margin: 10px 180px;}
+section .btn_write input{width: 100px; height: 30px;}
+
+/* board_view style */
+section .tbl_bo_view{width: 600px;}
+section .tbl_bo_view input{width: 550px; height: 25px;}
+section .tbl_bo_view textarea{width: 550px; height: 300px;}
