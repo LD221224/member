@@ -153,6 +153,7 @@ def member_edit(id):
         return render_template('member_edit.html', rs=rs)
 
 
+# 게시글 목록 페이지
 @app.route('/boardlist/')
 def boardlist():
     conn = getconn()
@@ -164,15 +165,78 @@ def boardlist():
     return render_template('boardlist.html', rs=rs)
 
 
-@app.route('/board_view/<int:id>/')
-def board_view(id):
+# 게시글 상세 페이지
+@app.route('/board_view/<int:bno>/')
+def board_view(bno):
     conn = getconn()
     cur = conn.cursor()
-    sql = "SELECT * FROM board WHERE bno = '%s'" % (id)
+    sql = "SELECT * FROM board WHERE bno = '%s'" % (bno)
     cur.execute(sql)
     rs = cur.fetchone()
     conn.close()
     return render_template('board_view.html', rs=rs)
+
+
+# 게시글 작성 페이지
+@app.route('/writing/', methods=['GET', 'POST'])
+def writing():
+    if request.method == 'POST':
+        # 데이터 가져오기
+        title = request.form['title']
+        content = request.form['content']
+        # mid = 로그인 되어있는 id
+        mid = session.get('userID')
+
+        # DB 연동
+        conn = getconn()
+        cur = conn.cursor()
+        sql = "INSERT INTO board(title, content, mid) " \
+              "VALUES('%s', '%s', '%s')" % (title, content, mid)
+        cur.execute(sql)
+        conn.commit()
+        conn.close()
+        return redirect(url_for('boardlist'))
+    else:
+        return render_template('writing.html')
+
+
+# 게시글 삭제
+@app.route('/board_del/<int:bno>/')
+def board_del(bno):
+    conn = getconn()
+    cur = conn.cursor()
+    sql = "DELETE FROM board WHERE bno = '%s'" % (bno)
+    cur.execute(sql)
+    conn.commit()
+    conn.close()
+    return redirect(url_for('boardlist'))
+
+
+# 게시글 수정
+@app.route('/board_edit/<int:bno>/', methods=['GET', 'POST'])
+def board_edit(bno):
+    if request.method == 'POST':
+        # 데이터 가져오기
+        title = request.form['title']
+        content = request.form['content']
+        mid = session.get('userID')
+        # DB 연동
+        conn = getconn()
+        cur = conn.cursor()
+        sql = "UPDATE board SET title = '%s', content = '%s', mid = '%s' " \
+              "WHERE bno = '%s'" % (title, content, mid, bno)
+        cur.execute(sql)
+        conn.commit()
+        conn.close()
+        return redirect(url_for('board_view', bno=bno))
+    else:
+        conn = getconn()
+        cur = conn.cursor()
+        sql = "SELECT * FROM board WHERE bno = '%s'" % (bno)
+        cur.execute(sql)
+        rs = cur.fetchone()
+        conn.close()
+        return render_template('board_edit.html', rs=rs)
 
 
 app.run(debug=True)
