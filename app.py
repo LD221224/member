@@ -2,15 +2,11 @@ import sqlite3
 
 from flask import Flask, render_template, request, redirect, url_for, session
 
+from model.model_member import getconn, select_member
+
 app = Flask(__name__)
 
 app.secret_key = "#abcde"
-
-
-# DB 접속
-def getconn():
-    conn = sqlite3.connect('./members.db')
-    return conn
 
 
 # index 페이지
@@ -23,12 +19,7 @@ def index():
 # 회원 목록 페이지
 @app.route('/memberlist/')
 def memberlist():
-    conn = getconn()
-    cur = conn.cursor()
-    sql = "SELECT * FROM member ORDER BY regDate DESC"
-    cur.execute(sql)
-    rs = cur.fetchall()
-    conn.close()
+    rs = select_member()
     return render_template('memberlist.html', rs=rs)
 
 
@@ -71,6 +62,7 @@ def register():
         # 세션 발급
         if rs:
             session['userID'] = rs[0]
+            session['userName'] = rs[2]
             # redirect - 페이지 이동 함수
             return redirect(url_for('memberlist'))
     else:
@@ -95,6 +87,7 @@ def login():
         if rs:
             # 아이디로 세션 발급
             session['userID'] = rs[0]
+            session['userName'] = rs[2]
             # 로그인 후 인덱스페이지로 이동
             return redirect(url_for('index'))
         else:
@@ -108,7 +101,9 @@ def login():
 @app.route('/logout/')
 def logout():
     # 세션 삭제
-    session.pop("userID")
+    # session.pop("userID")
+    # session.pop("userName")
+    session.clear()
     return redirect(url_for('index'))
 
 
@@ -184,8 +179,8 @@ def writing():
         # 데이터 가져오기
         title = request.form['title']
         content = request.form['content']
-        # mid = 로그인 되어있는 id
-        mid = session.get('userID')
+        # mid = 로그인 되어있는 name
+        mid = session.get('userName')
 
         # DB 연동
         conn = getconn()
@@ -219,7 +214,7 @@ def board_edit(bno):
         # 데이터 가져오기
         title = request.form['title']
         content = request.form['content']
-        mid = session.get('userID')
+        mid = session.get('userName')
         # DB 연동
         conn = getconn()
         cur = conn.cursor()
