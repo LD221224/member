@@ -19,6 +19,7 @@ def create_table():
             createDate timestamp date DEFAULT (datetime('now', 'localtime')),
             hit integer,
             mid char(5) NOT NULL,
+            name text NOT NULL,
             FOREIGN KEY(mid) REFERENCES member(mid) ON DELETE CASCADE
         )
     """
